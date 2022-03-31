@@ -1,0 +1,15 @@
+https://github.com/redox-os/rusttype/blob/master/dev/examples/gpu_cache.rs
+✔ implement layout_paragraph @started(22-03-29 19:04) @done(22-03-29 19:33) @lasted(29m40s)
+✔ init font @done(22-03-29 21:47)
+✔ init gpu cache @done(22-03-29 22:17)
+✔ init shader program @done(22-03-30 17:26)
+✔ init gpu cache texture @done(22-03-30 17:33)
+✔ impliment WindowEvent::ReceivedCharacter(c) @done(22-03-30 18:46)
+in loop
+    ✔ get & queue glyphs @done(22-03-30 19:00)
+    when cache queued
+        ✔ write glyph to cache texture @done(22-03-30 19:00)
+    ✔ init texture uniform from cache texture @done(22-03-30 19:04)
+    ✔ init vertex buffer for paragraph rect vertices @done(22-03-30 19:42)
+        includes vertex position, texture coordinates, and colour
+    ✔ draw the vertices with uniforms and shader program @done(22-03-30 19:56)
