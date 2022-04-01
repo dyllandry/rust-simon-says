@@ -1,14 +1,3 @@
-create text component & system
-✔ create most basic Text component @done(22-03-31 18:06)
-✔ create Text System mvp @done(22-03-31 19:57)
-    ✔ load font @done(22-03-31 18:19)
-    ✔ initialize gpu cache @done(22-03-31 18:19)
-    ✔ initialize shader program @done(22-03-31 18:21)
-    ✔ init gpu cache texture @done(22-03-31 18:28)
-    ✔ migrate layout_paragraph @done(22-03-31 18:31)
-    render function
-        ✔ get glyphs and queue in cache @done(22-03-31 18:31)
-        ✔ write glyph to cache texture @done(22-03-31 18:39)
-        ✔ init texture uniform from cache texture @done(22-03-31 18:43)
-        ✔ init vertex buffer @done(22-03-31 18:43)
-        ✔ draw on frame @done(22-03-31 19:41)
+create better text & component system
+✔ move text component into own file @done(22-03-31 21:21)
+✔ move text system into own file @done(22-03-31 21:21)

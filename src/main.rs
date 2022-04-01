@@ -1,9 +1,9 @@
-use ecs::{Text, TextSystem};
+mod ecs;
+use ecs::{component::Text, system::TextSystem};
 use glium::{
     glutin::{self, event::Event},
     Surface,
 };
-mod ecs;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let event_loop = glutin::event_loop::EventLoop::new();
