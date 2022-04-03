@@ -3,7 +3,7 @@ use std::borrow::Cow;
 use glium::{implement_vertex, program, uniform, Display, Frame, Program, Surface, Texture2d};
 use rusttype::{gpu_cache::Cache, point, vector, Font, PositionedGlyph, Rect, Scale};
 
-use crate::ecs::component::Text;
+use crate::ecs::component::{Text, Transform};
 
 pub struct TextSystem {
     font: Font<'static>,
@@ -81,13 +81,24 @@ impl TextSystem {
             glyph_cache_texture,
         }
     }
-    pub fn draw(&mut self, frame: &mut Frame, display: &Display, text: &Text) {
+    pub fn draw(
+        &mut self,
+        frame: &mut Frame,
+        display: &Display,
+        text: &Text,
+        transform: &Transform,
+    ) {
         let scale = display.gl_window().window().scale_factor() as f32;
         let (width, _): (u32, _) = display.gl_window().window().inner_size().into();
 
         // Get glyphs and queue in cache
-        let glyphs =
-            self.layout_paragraph(&self.font, Scale::uniform(24.0 * scale), width, &text.text);
+        let glyphs = self.layout_paragraph(
+            &self.font,
+            Scale::uniform(24.0 * scale),
+            width,
+            &text.text,
+            transform,
+        );
         for glyph in &glyphs {
             self.glyph_cache.queue_glyph(0, glyph.clone());
         }
@@ -216,12 +227,16 @@ impl TextSystem {
         scale: Scale,
         width: u32,
         text: &str,
+        transform: &Transform,
     ) -> Vec<PositionedGlyph<'a>> {
         let mut result = Vec::new();
         let v_metrics = font.v_metrics(scale);
         let advance_height = v_metrics.ascent - v_metrics.descent + v_metrics.line_gap;
         // This is the insertion point we use to position characters.
-        let mut caret = point(0.0, v_metrics.ascent);
+        let mut caret = point(
+            transform.position.x,
+            transform.position.y + v_metrics.ascent,
+        );
         let mut last_glyph_id = None;
         for c in text.chars() {
             // Handle control characters
@@ -229,7 +244,7 @@ impl TextSystem {
                 match c {
                     '\r' => {
                         // If a newline is entered, reset the insertion point the start and one linedown.
-                        caret = point(0.0, caret.y + advance_height);
+                        caret = point(transform.position.x, caret.y + advance_height);
                     }
                     '\n' => {}
                     _ => {}
@@ -252,7 +267,7 @@ impl TextSystem {
             // insertion caret to the next line and put the glyph there instead.
             if let Some(bb) = glyph.pixel_bounding_box() {
                 if bb.max.x > width as i32 {
-                    caret = point(0.0, caret.y + advance_height);
+                    caret = point(transform.position.x, caret.y + advance_height);
                     glyph.set_position(caret);
                     last_glyph_id = None;
                 }

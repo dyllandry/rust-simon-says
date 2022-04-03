@@ -1,5 +1,8 @@
 mod ecs;
-use ecs::{component::Text, system::TextSystem};
+use ecs::{
+    component::{Text, Transform},
+    system::TextSystem,
+};
 use glium::{
     glutin::{self, event::Event},
     Surface,
@@ -24,6 +27,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         },
     );
 
+    let entity_transform = world.borrow_component::<Transform>(entity).unwrap();
+    entity_transform.position.x = 50.0;
+    entity_transform.position.y = 50.0;
+
     event_loop.run(move |ev, _, control_flow| {
         // Handle events
         match ev {
@@ -41,13 +48,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 frame.clear_color(1.0, 1.0, 1.0, 0.0);
 
                 // Draw text components
-                for text in world
-                    .borrow_component_vec::<Text>()
-                    .unwrap()
-                    .iter()
-                    .filter_map(|text| text.as_ref())
+                let texts = world.borrow_component_vec::<Text>().unwrap();
+                let transforms = world.borrow_component_vec::<Transform>().unwrap();
+                let zip = texts.iter().zip(transforms.iter());
+                for (text, transform) in
+                    zip.filter_map(|(text, transform)| Some((text.as_ref()?, transform.as_ref()?)))
                 {
-                    text_system.draw(&mut frame, &display, text);
+                    text_system.draw(&mut frame, &display, text, transform);
                 }
 
                 // Finish drawing, swap buffers, consume frame.

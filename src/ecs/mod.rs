@@ -1,5 +1,6 @@
 pub mod component;
 pub mod system;
+use self::component::Transform;
 use std::cell::{RefCell, RefMut};
 
 // World to store component vectors and entity count.
@@ -22,6 +23,8 @@ impl World {
             component_vec.push_none();
         }
         self.entities_count += 1;
+        // Every component gets a transform.
+        self.add_component_to_entity(entity_id, Transform::new());
         entity_id
     }
 
@@ -63,6 +66,23 @@ impl World {
                 .downcast_ref::<RefCell<Vec<Option<ComponentType>>>>()
             {
                 return Some(component_vec.borrow_mut());
+            }
+        }
+        None
+    }
+
+    /// Borrow a specific component from an entity.
+    pub fn borrow_component<ComponentType: 'static>(
+        &mut self,
+        entity: usize,
+    ) -> Option<&mut ComponentType> {
+        // Try to find the component_vec for ComponentType.
+        for component_vec in self.component_vecs.iter_mut() {
+            if let Some(component_vec) = component_vec
+                .as_any_mut()
+                .downcast_mut::<RefCell<Vec<Option<ComponentType>>>>()
+            {
+                return component_vec.get_mut()[entity].as_mut();
             }
         }
         None
