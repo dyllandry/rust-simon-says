@@ -1,4 +1,4 @@
-pub struct Transform {
+pub struct TransformComponent {
     pub position: Position,
 }
 
@@ -7,9 +7,9 @@ pub struct Position {
     pub y: f32,
 }
 
-impl Transform {
+impl TransformComponent {
     pub fn new() -> Self {
         let position = Position { x: 0.0, y: 0.0 };
-        Transform { position }
+        TransformComponent { position }
     }
 }

@@ -1,8 +1,7 @@
 mod ecs;
-use ecs::{
-    component::{Text, Transform},
-    system::TextSystem,
-};
+use ecs::component::text::TextComponent;
+use ecs::component::transform::TransformComponent;
+use ecs::system::text_system::TextSystem;
 use glium::{
     glutin::{self, event::Event},
     Surface,
@@ -22,12 +21,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let entity = world.new_entity();
     world.add_component_to_entity(
         entity,
-        Text {
+        TextComponent {
             text: "Hi Vicky-poo!".to_string(),
         },
     );
 
-    let entity_transform = world.borrow_component::<Transform>(entity).unwrap();
+    let entity_transform = world
+        .borrow_component::<TransformComponent>(entity)
+        .unwrap();
     entity_transform.position.x = 50.0;
     entity_transform.position.y = 50.0;
 
@@ -48,8 +49,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 frame.clear_color(1.0, 1.0, 1.0, 0.0);
 
                 // Draw text components
-                let texts = world.borrow_component_vec::<Text>().unwrap();
-                let transforms = world.borrow_component_vec::<Transform>().unwrap();
+                let texts = world.borrow_component_vec::<TextComponent>().unwrap();
+                let transforms = world.borrow_component_vec::<TransformComponent>().unwrap();
                 let zip = texts.iter().zip(transforms.iter());
                 for (text, transform) in
                     zip.filter_map(|(text, transform)| Some((text.as_ref()?, transform.as_ref()?)))

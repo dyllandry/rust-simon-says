@@ -3,7 +3,8 @@ use std::borrow::Cow;
 use glium::{implement_vertex, program, uniform, Display, Frame, Program, Surface, Texture2d};
 use rusttype::{gpu_cache::Cache, point, vector, Font, PositionedGlyph, Rect, Scale};
 
-use crate::ecs::component::{Text, Transform};
+use crate::ecs::component::text::TextComponent;
+use crate::ecs::component::transform::TransformComponent;
 
 pub struct TextSystem {
     font: Font<'static>,
@@ -85,8 +86,8 @@ impl TextSystem {
         &mut self,
         frame: &mut Frame,
         display: &Display,
-        text: &Text,
-        transform: &Transform,
+        text: &TextComponent,
+        transform: &TransformComponent,
     ) {
         let scale = display.gl_window().window().scale_factor() as f32;
         let (width, _): (u32, _) = display.gl_window().window().inner_size().into();
@@ -227,7 +228,7 @@ impl TextSystem {
         scale: Scale,
         width: u32,
         text: &str,
-        transform: &Transform,
+        transform: &TransformComponent,
     ) -> Vec<PositionedGlyph<'a>> {
         let mut result = Vec::new();
         let v_metrics = font.v_metrics(scale);

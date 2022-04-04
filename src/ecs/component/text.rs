@@ -1,3 +1,4 @@
-pub struct Text {
+pub struct TextComponent {
     pub text: String,
+    pub alignment: TextAlignment,
 }

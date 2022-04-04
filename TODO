@@ -2,3 +2,5 @@ create better text & component system
 ✔ move text component into own file @done(22-03-31 21:21)
 ✔ move text system into own file @done(22-03-31 21:21)
 ✔ position text via minimal position component @done(22-04-02 20:47)
+☐ center align text
+☐ anchor text to middle of screen

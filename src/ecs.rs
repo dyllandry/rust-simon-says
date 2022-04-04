@@ -1,6 +1,6 @@
 pub mod component;
 pub mod system;
-use self::component::Transform;
+use self::component::transform::TransformComponent;
 use std::cell::{RefCell, RefMut};
 
 // World to store component vectors and entity count.
@@ -24,7 +24,7 @@ impl World {
         }
         self.entities_count += 1;
         // Every component gets a transform.
-        self.add_component_to_entity(entity_id, Transform::new());
+        self.add_component_to_entity(entity_id, TransformComponent::new());
         entity_id
     }
 
