@@ -1,5 +1,5 @@
 mod ecs;
-use ecs::component::text::TextComponent;
+use ecs::component::text::{TextAlignment, TextComponent};
 use ecs::component::transform::TransformComponent;
 use ecs::system::text_system::TextSystem;
 use glium::{
@@ -22,15 +22,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     world.add_component_to_entity(
         entity,
         TextComponent {
-            text: "Hi Vicky-poo!".to_string(),
+            text: "X\rXXX\rXXXXX\rXXXXXXX".to_string(),
+            alignment: TextAlignment::Center,
         },
     );
-
-    let entity_transform = world
-        .borrow_component::<TransformComponent>(entity)
-        .unwrap();
-    entity_transform.position.x = 50.0;
-    entity_transform.position.y = 50.0;
 
     event_loop.run(move |ev, _, control_flow| {
         // Handle events
