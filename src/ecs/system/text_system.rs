@@ -276,6 +276,8 @@ impl TextSystem {
                     caret = point(transform.position.x, caret.y + advance_height);
                     glyph.set_position(caret);
                     last_glyph_id = None;
+                    glyph_lines.push(Vec::new());
+                    line_index += 1;
                 }
             }
             // Position the caret ahead where the next glyph would go.
