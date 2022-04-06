@@ -89,13 +89,13 @@ impl TextSystem {
         transform: &TransformComponent,
     ) {
         let scale = display.gl_window().window().scale_factor() as f32;
-        let (width, _): (u32, _) = display.gl_window().window().inner_size().into();
+        // let (width, _): (u32, _) = display.gl_window().window().inner_size().into();
 
         // Get glyphs and queue in cache
         let glyphs = self.layout_paragraph(
             &self.font,
             Scale::uniform(24.0 * scale),
-            width as f32,
+            text.width,
             &text.text,
             transform,
             &text.alignment,

@@ -22,8 +22,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     world.add_component_to_entity(
         entity,
         TextComponent {
-            text: "X\rXXX\rXXXXX\rXXXXXXX".to_string(),
+            text: "1\r222\r33333\r4444444\r555555555\r66666666666".to_string(),
             alignment: TextAlignment::Center,
+            width: 200.0,
         },
     );
 
