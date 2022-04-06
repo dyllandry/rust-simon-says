@@ -4,6 +4,6 @@ create better text & component system
 ✔ position text via minimal position component @done(22-04-02 20:47)
 ✔ center align text @done(22-04-05 17:21)
 ✔ set text width @done(22-04-05 20:04)
-☐ anchor text to middle of screen
+✔ anchor text to middle of screen @done(22-04-06 16:31)
 ☐ nest transforms
 ☐ outline area of text

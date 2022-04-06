@@ -3,7 +3,7 @@ use rusttype::{gpu_cache::Cache, point, vector, Font, PositionedGlyph, Rect, Sca
 use std::borrow::Cow;
 
 use crate::ecs::component::text::{TextAlignment, TextComponent};
-use crate::ecs::component::transform::TransformComponent;
+use crate::ecs::component::transform::{Position, TransformComponent};
 
 pub struct TextSystem {
     font: Font<'static>,
@@ -92,12 +92,13 @@ impl TextSystem {
         // let (width, _): (u32, _) = display.gl_window().window().inner_size().into();
 
         // Get glyphs and queue in cache
+        let paragraph_position = transform.absolute_position(display);
         let glyphs = self.layout_paragraph(
             &self.font,
             Scale::uniform(24.0 * scale),
-            text.width,
+            transform.width,
             &text.text,
-            transform,
+            paragraph_position,
             &text.alignment,
         );
         for glyph in &glyphs {
@@ -228,17 +229,14 @@ impl TextSystem {
         scale: Scale,
         max_paragraph_width: f32,
         text: &str,
-        transform: &TransformComponent,
+        position: Position,
         text_alignment: &TextAlignment,
     ) -> Vec<PositionedGlyph<'a>> {
         // Init some font stats.
         let v_metrics = font.v_metrics(scale);
         let advance_height = v_metrics.ascent - v_metrics.descent + v_metrics.line_gap;
         // This is the insertion point we use to position characters.
-        let mut caret = point(
-            transform.position.x,
-            transform.position.y + v_metrics.ascent,
-        );
+        let mut caret = point(position.x, position.y + v_metrics.ascent);
         let mut last_glyph_id = None;
         let mut glyph_lines: Vec<Vec<PositionedGlyph>> = vec![vec![]];
         let mut line_index = 0;
@@ -248,7 +246,7 @@ impl TextSystem {
                 match c {
                     '\r' => {
                         // If a newline is entered, reset the insertion point the start and one linedown.
-                        caret = point(transform.position.x, caret.y + advance_height);
+                        caret = point(position.x, caret.y + advance_height);
                         glyph_lines.push(Vec::new());
                         line_index += 1;
                     }
@@ -272,8 +270,8 @@ impl TextSystem {
             // If we accidentally positioned it past the maximum width of the paragaph, move the
             // insertion caret to the next line and put the glyph there instead.
             if let Some(bb) = glyph.pixel_bounding_box() {
-                if bb.max.x > max_paragraph_width as i32 {
-                    caret = point(transform.position.x, caret.y + advance_height);
+                if bb.max.x > position.x as i32 + max_paragraph_width as i32 {
+                    caret = point(position.x, caret.y + advance_height);
                     glyph.set_position(caret);
                     last_glyph_id = None;
                     glyph_lines.push(Vec::new());

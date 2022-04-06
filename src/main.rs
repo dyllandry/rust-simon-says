@@ -1,6 +1,6 @@
 mod ecs;
 use ecs::component::text::{TextAlignment, TextComponent};
-use ecs::component::transform::TransformComponent;
+use ecs::component::transform::{Anchor, TransformComponent};
 use ecs::system::text_system::TextSystem;
 use glium::{
     glutin::{self, event::Event},
@@ -24,9 +24,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         TextComponent {
             text: "1\r222\r33333\r4444444\r555555555\r66666666666".to_string(),
             alignment: TextAlignment::Center,
-            width: 200.0,
         },
     );
+
+    let transform = world
+        .borrow_component::<TransformComponent>(entity)
+        .unwrap();
+    transform.anchor = Anchor::TopMiddle;
+    transform.width = 150.0;
 
     event_loop.run(move |ev, _, control_flow| {
         // Handle events
