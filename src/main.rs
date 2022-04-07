@@ -22,7 +22,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     world.add_component_to_entity(
         entity,
         TextComponent {
-            text: "1\r222\r33333\r4444444\r555555555\r66666666666".to_string(),
+            text: "Simon Says".to_string(),
             alignment: TextAlignment::Center,
         },
     );
@@ -30,8 +30,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let transform = world
         .borrow_component::<TransformComponent>(entity)
         .unwrap();
-    transform.anchor = Anchor::TopMiddle;
     transform.width = 150.0;
+    transform.anchor = Anchor::TopMiddle;
+    transform.position.y = 20.0;
 
     event_loop.run(move |ev, _, control_flow| {
         // Handle events

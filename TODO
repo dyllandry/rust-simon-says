@@ -5,5 +5,26 @@ create better text & component system
 ✔ center align text @done(22-04-05 17:21)
 ✔ set text width @done(22-04-05 20:04)
 ✔ anchor text to middle of screen @done(22-04-06 16:31)
-☐ nest transforms
-☐ outline area of text
+text
+    ☐ add text color
+    ☐ outline area of text
+input
+    How can something react to a button press?
+        For example, add a PlayerComponent impl a trait called OnInputCommand(command).
+        Command can be enum Command.Accept.
+
+        Any components that impl OnInputCommand get called by input_command_system.
+
+        Go through world component vecs, get ones that are of a type that impl trait OnInputCommand,
+        and call thing.OnInputCommand(command)
+scripting
+    How does that component do things to other components? Can I just pass it the world
+    instance? Can the player component keep a reference to the other components it needs
+    to work on?
+        https://gamedev.stackexchange.com/questions/169354/how-can-i-handle-scripting-like-tasks-in-my-ecs
+
+    Or is this something that doesn't necessarily need to work on the component system?
+    Can I just script alongside the components?
+        https://gamedev.stackexchange.com/questions/173974/user-friendly-scripting-when-using-an-ecs
+other
+    ☐ nest transforms
