@@ -26,5 +26,7 @@ scripting
     Or is this something that doesn't necessarily need to work on the component system?
     Can I just script alongside the components?
         https://gamedev.stackexchange.com/questions/173974/user-friendly-scripting-when-using-an-ecs
+questions to try out
+    can a component contain a reference?
 other
     ☐ nest transforms

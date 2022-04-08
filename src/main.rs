@@ -18,21 +18,38 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut world = ecs::World::new();
     let mut text_system = TextSystem::new(&display);
 
-    let entity = world.new_entity();
+    // Setup title
+    let title_entity = world.new_entity();
     world.add_component_to_entity(
-        entity,
+        title_entity,
         TextComponent {
             text: "Simon Says".to_string(),
             alignment: TextAlignment::Center,
         },
     );
-
-    let transform = world
-        .borrow_component::<TransformComponent>(entity)
+    let title_transform = world
+        .borrow_component::<TransformComponent>(title_entity)
         .unwrap();
-    transform.width = 150.0;
-    transform.anchor = Anchor::TopMiddle;
-    transform.position.y = 20.0;
+    title_transform.width = 300.0;
+    title_transform.anchor = Anchor::TopMiddle;
+    title_transform.position.y = 20.0;
+
+    // Setup subtitle
+    let subtitle_entity = world.new_entity();
+    let subtitle_text = TextComponent {
+        alignment: TextAlignment::Center,
+        text: "Press Enter to Play".to_string(),
+    };
+    world.add_component_to_entity(subtitle_entity, subtitle_text);
+    let subtitle_transform = world
+        .borrow_component::<TransformComponent>(subtitle_entity)
+        .unwrap();
+    // ! FIXME: This width is too small on retina displays. I think I need to do that think where
+    // ! you scale by some dpi scale thing. It was in the gpu_cache tutorial for rusttype.
+    subtitle_transform.width = 500.0;
+    // ! FIXME: I can tell text isn't centered on retina. Didn't test on windows.
+    subtitle_transform.anchor = Anchor::TopMiddle;
+    subtitle_transform.position.y = 100.0;
 
     event_loop.run(move |ev, _, control_flow| {
         // Handle events
