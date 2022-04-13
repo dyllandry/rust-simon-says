@@ -1,1 +1,2 @@
-pub mod text_system;
+pub mod input;
+pub mod text;

@@ -9,14 +9,15 @@ text
     ☐ add text color
     ☐ outline area of text
 input
-    How can something react to a button press?
-        For example, add a PlayerComponent impl a trait called OnInputCommand(command).
-        Command can be enum Command.Accept.
-
-        Any components that impl OnInputCommand get called by input_command_system.
-
-        Go through world component vecs, get ones that are of a type that impl trait OnInputCommand,
-        and call thing.OnInputCommand(command)
+    I liked the architecture in the following article. I followed it a bit.
+    https://www.gamedev.net/blogs/entry/2250186-designing-a-robust-input-handling-system-for-games/
+    In summary...
+        Input System: Maps raw input from OS to input relevant to games. Like parsing key input to specificaly keydown, keyup, and keypress.
+        Struct of valid inputs: Created by the input system, contains validated game relevant inputs.
+        Context: Receive the struct of valid inputs and decides what to do with them given the current "context" of the game, like if a menu is open or if the character is fighting something. 
+    ✔ create input system that receives input every frame @done(22-04-08 18:58)
+    ✔ add action to struct of valid mapped input @done(22-04-12 17:32)
+    ✔ create context trait and sample context structure @done(22-04-12 21:08)
 scripting
     How does that component do things to other components? Can I just pass it the world
     instance? Can the player component keep a reference to the other components it needs

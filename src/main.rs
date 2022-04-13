@@ -1,7 +1,8 @@
 mod ecs;
 use ecs::component::text::{TextAlignment, TextComponent};
 use ecs::component::transform::{Anchor, TransformComponent};
-use ecs::system::text_system::TextSystem;
+use ecs::system::input::{InputSystem, SampleContext};
+use ecs::system::text::TextSystem;
 use glium::{
     glutin::{self, event::Event},
     Surface,
@@ -17,6 +18,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut world = ecs::World::new();
     let mut text_system = TextSystem::new(&display);
+    let mut input_system = InputSystem::new();
+    let sample_context = SampleContext {};
+    input_system.set_context(Box::new(sample_context));
 
     // Setup title
     let title_entity = world.new_entity();
@@ -59,7 +63,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     *control_flow = glutin::event_loop::ControlFlow::Exit;
                     return;
                 }
-                _ => {}
+                _ => {
+                    input_system.process_input(&event, &mut world);
+                }
             },
 
             Event::MainEventsCleared => {
