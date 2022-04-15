@@ -18,6 +18,42 @@ input
     ✔ create input system that receives input every frame @done(22-04-08 18:58)
     ✔ add action to struct of valid mapped input @done(22-04-12 17:32)
     ✔ create context trait and sample context structure @done(22-04-12 21:08)
+    How will the start button react to an input?
+        Idea 1
+            How does the start button react to input?
+                StartButton entity with StartButtonScript component.
+                ☐ Create StartButton entity with StartButton script component 
+                StartButtonScript implements trait KeyDown(key).
+                ☐ Implement KeyDown(key) on StartButton
+                StartMenu context calls KeyDown(key) on component vector of StartButtonScript
+            How will the StartButtonScript change the scene?
+                Can the StartButtonScript get a reference to the scene manager?
+                Is the scene manager in the world?
+                How does the StartButtonScript get a reference to the world?
+        Idea 2
+            Inspired by this comment https://www.gamedev.net/forums/topic/710787-ecs-storing-a-function-in-a-component/5442206/
+            Keep functions out of components, have the input system and context handle the event.
+            The MainMenu context sees Return is pressed, sends an event StartButtonPressed.
+            The MainMenuSystem sees the event, triggers a scene change
+            Parts
+                MainMenuContext
+                MainMenuSystem
+                EventBus
+                    pub
+                        subscribe
+                        unsubscribe
+                        sendEvent
+                    private
+                        subscribers<EventType, Vec<Box<dyn traitobject for event type?>>>
+                        Maybe i should keep it simple, and just add a new list of subscribers
+                        for each kind of event.
+                            subscribers: HashMap<EventType, Vec<Box<>>
+                            start_button_pressed_subscribers: Vec<Box<dyn EventCallbackTraits.StartButtonPressed>>
+                            game_paused_subscribers: Vec<Box<dyn EventCallbackTraits.StartButtonPressed>>
+                            fn 
+                    This SO answer has some info on implementing callbacks
+                        https://stackoverflow.com/questions/41081240/idiomatic-callbacks-in-rust
+                    Here's EXACTLY what i need, i think: https://users.rust-lang.org/t/event-bus-with-callbacks-that-take-differently-typed-parameters/71013/5
 scripting
     How does that component do things to other components? Can I just pass it the world
     instance? Can the player component keep a reference to the other components it needs
